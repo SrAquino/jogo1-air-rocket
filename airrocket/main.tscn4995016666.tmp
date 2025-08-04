@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://gwkokaa5nlmy"]
+
+[ext_resource type="Texture2D" uid="uid://57wdare7v20w" path="res://assets/images/AdobeStock_245951444.jpeg" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://tccbg6kcmqjk" path="res://scenes/player.tscn" id="2_0xm2m"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Campo" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_ig7tw")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 576.0
+offset_right = 578.0
+offset_bottom = 720.0
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_top = 3.0
+offset_right = 3.0
+offset_bottom = 1283.0
+rotation = -1.5708
+color = Color(0.964706, 0.627451, 0.992157, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+offset_top = 720.0
+offset_right = 3.0
+offset_bottom = 2000.0
+rotation = -1.5708
+color = Color(0.964706, 0.627451, 0.992157, 1)
+
+[node name="Player" parent="." instance=ExtResource("2_0xm2m")]
+position = Vector2(100, 670)
+
+[node name="Player2" parent="." instance=ExtResource("2_0xm2m")]
+position = Vector2(1180, 360)
+player1 = false
