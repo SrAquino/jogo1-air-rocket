@@ -1,64 +1,50 @@
-extends Area2D
+extends CharacterBody2D
 
-var boll_velocity : int = 500
-var initial_position : Vector2 = Vector2(640,360)
-var initial_direction : Vector2 = Vector2(0,0)
-var new_direction : Vector2 = Vector2(0,0)
+var  boll_velocity : float = 500
+var accel : float = 10
+var dir : Vector2
 
-var y_min : float = 0
-var y_max : float = 720
+#var initial_direction : Vector2 = Vector2(0,0)
+#var new_direction : Vector2 = Vector2(0,0)
 
-var x_min : float = 0
-var x_max : float = 1280
+var window_size : Vector2
 
 @onready var son_impacto_barreira : AudioStreamPlayer2D = $barreira
 @onready var son_impacto_player : AudioStreamPlayer2D = $som_player
 
-
 @onready var timer : Timer = $Timer
 
 func _ready() -> void:
-	reset_boll()
-	
-func _process(delta: float) -> void:
-	boll_moviment(delta)
-	wall_colider()
-
-func boll_moviment(delta: float)->void :
-	position += new_direction * boll_velocity * delta
-	#if position.x > x_max or position.x < x_min:
-	#	reset_boll()
-	
-func choose_inicial_direction()-> void:
-	var randon_x = [-1,1].pick_random()
-	var randon_y = [-1,1].pick_random()
-	
-	initial_direction = Vector2(randon_x,randon_y)
-	new_direction = initial_direction
-
-func reset_boll()-> void:
-	new_direction = Vector2(0,0)
-	position = initial_position
+	window_size = get_viewport_rect().size
 	start_timer()
 	
 
+func reset_boll()-> void:
+	position = Vector2(window_size.x/2,window_size.y/2)
+	dir = randon_direction()
+	
+func randon_direction():
+	var new_dir := Vector2()
+	new_dir.x = [1,1].pick_random()
+	new_dir.y = randf_range(-1,1)
+	return new_dir.normalized()
+
+func _physics_process(delta: float):
+	var collision = move_and_collide(dir * boll_velocity * delta)
+	var collider
+	if collision:
+		collider = collision.get_collider()
+		if collider == $"../Player" or collider == $"../Player2":
+			print(collider)
+			boll_velocity += accel
+			dir = dir.bounce(collision.get_normal())
+		else:
+			dir = dir.bounce(collision.get_normal())
+			
+		
+	
 func start_timer()->void:
 	timer.start()
 	
-
-func wall_colider()-> void:
-	if position.y >= y_max or position.y <= y_min:
-		new_direction.y *= -1 
-		son_impacto_barreira.play()
-		
-
-
-func _on_body_entered(body: Node2D) -> void:
-	print(body.get_groups())
-	if body.is_in_group("players"):
-		new_direction.x *= -1
-		son_impacto_player.play()
-
-
 func _on_timer_timeout() -> void:
-	choose_inicial_direction()
+	reset_boll()

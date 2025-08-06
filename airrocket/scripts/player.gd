@@ -1,7 +1,11 @@
 extends StaticBody2D
 
 @export var player1 : bool
+@export var cpu : bool
+
 var player_velocity : int = 500
+var boll_pos : Vector2
+var move_by : int
 
 func _ready() -> void:
 	pass 
@@ -16,12 +20,17 @@ func moviments(delta: float)-> void:
 			position.y += player_velocity * delta
 		elif Input.is_action_pressed("up1"):
 			position.y -= player_velocity * delta
-	else :
+	else:
 		if Input.is_action_pressed("down2"):
 			position.y += player_velocity * delta
 		elif Input.is_action_pressed("up2"):
 			position.y -= player_velocity * delta
+			
+	if cpu : 
+		boll_pos = $"../Bola".position
+		move_by = player_velocity * delta * sign(position.y - boll_pos.y)
+		position.y -= move_by
 
 
 func moviment_limit () -> void :
-	position.y = clamp(position.y, 51,670)
+	position.y = clamp(position.y, 63,657)

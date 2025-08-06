@@ -3,13 +3,13 @@ extends Node2D
 var points1 : int = 0
 var points2 : int = 0
 
-@onready var boll : Area2D = $"../Bola"
+@onready var boll : CharacterBody2D = $"../Bola"
 @onready var text_point1 : Label = $"../UI/Control/Player1_point"
 @onready var text_point2 : Label = $"../UI/Control/Player2_point"
 
 @onready var som_gol : AudioStreamPlayer2D = $AudioStreamPlayer2D
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Sair"):
 		get_tree().quit()
 		
